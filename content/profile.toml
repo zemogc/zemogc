@@ -1,0 +1,152 @@
+# Fuente única del contenido visual del perfil.
+# Después de editar este archivo, regenera los SVG con:
+#   python3 scripts/build_assets.py
+
+[hero]
+kicker = "Founder & CEO · ZemZysteM"
+name = "Zemog Gómez Tabares"
+role = "Software Developer · +4 años"
+tagline = [
+  "Diseño y construyo plataformas SaaS multi-tenant,",
+  "señalización digital y automatización: de la arquitectura al despliegue.",
+]
+chips = ["Arquitectura hexagonal", "SaaS multi-tenant", "Digital signage", "RPA"]
+
+[[pillars]]
+icon = "hex"
+title = "Arquitectura"
+text = "Arquitectura hexagonal y monolitos modulares con fronteras claras entre dominio, aplicación e infraestructura."
+
+[[pillars]]
+icon = "layers"
+title = "Producto"
+text = "SaaS white-label multi-tenant con aislamiento por cliente, RBAC y licenciamiento centralizado."
+
+[[pillars]]
+icon = "pulse"
+title = "Operación"
+text = "CI/CD con GitHub Actions, contenedores Docker, NGINX en VPS Linux y monitoreo propio."
+
+[[pillars]]
+icon = "bot"
+title = "Automatización"
+text = "Procesos con RPA en Rocketbot y agentes digitales trazables con aprobación humana."
+
+[[stack]]
+label = "Lenguajes"
+items = ["Python", "TypeScript", "JavaScript", "Dart", "PHP", "C#", "SQL"]
+
+[[stack]]
+label = "Backend"
+items = ["FastAPI", "Django", "Django REST", "SQLAlchemy", "Alembic", "Pydantic", "Laravel", ".NET · EF", "Node.js"]
+
+[[stack]]
+label = "Frontend"
+items = ["React", "Vite", "PixiJS", "Jinja2", "HTML · CSS"]
+
+[[stack]]
+label = "Pantallas"
+items = ["Flutter", "Riverpod", "Android", "Samsung Tizen", "LG webOS"]
+
+[[stack]]
+label = "Datos"
+items = ["PostgreSQL", "SQLite", "Redis"]
+
+[[stack]]
+label = "DevOps"
+items = ["Docker", "GitHub Actions", "NGINX", "Traefik", "systemd", "Gunicorn", "Uvicorn", "Linux VPS"]
+
+[[stack]]
+label = "Arquitectura"
+items = ["Hexagonal", "Monolito modular", "Multi-tenant", "RBAC", "SSE", "ADRs"]
+
+[[stack]]
+label = "Automatización"
+items = ["Rocketbot RPA", "Agentes digitales"]
+
+[[stack]]
+label = "Calidad"
+items = ["pytest", "Vitest", "Testing Library", "Ruff"]
+
+# Proyectos de ZemZysteM. El código es privado: las tarjetas no enlazan a repositorios.
+[[projects]]
+slug = "zystemmedia"
+category = "Señalización digital"
+title = "ZystemMedia"
+text = "Gestión de pantallas para múltiples organizaciones: dispositivos, contenido, playlists, programación y monitoreo. Monolito modular con multitenancy y RBAC."
+tags = ["Django", "DRF", "PostgreSQL", "Redis", "React", "TypeScript"]
+
+[[projects]]
+slug = "players"
+category = "Reproductores"
+title = "ZystemMedia Players"
+text = "Player Android en Flutter y núcleo web en TypeScript con adaptadores para Samsung Tizen y LG webOS sobre un único contrato de Player API."
+tags = ["Flutter", "Riverpod", "TypeScript", "Tizen", "webOS"]
+
+[[projects]]
+slug = "turnero"
+category = "Gestión de turnos"
+title = "Turnero ZemZysteM"
+text = "SaaS white-label con kiosco, ventanilla, pantalla de sala y paneles. Aislamiento automático por tenant, licencias con modo de gracia y tiempo real por SSE."
+tags = ["FastAPI", "SQLAlchemy", "Alembic", "Redis", "Docker"]
+
+[[projects]]
+slug = "wayfinding"
+category = "Kioscos táctiles"
+title = "Wayfinding ZemZysteM"
+text = "Siete servicios para centros médicos, comerciales y oficinas: catálogo, rutas sobre plano y QR al celular. Núcleo compartido con arquitectura hexagonal."
+tags = ["FastAPI", "Jinja2", "NGINX", "systemd", "CI/CD"]
+
+[[projects]]
+slug = "agent-office"
+category = "Agentes digitales"
+title = "ZemZysteM Agent Office"
+text = "Plataforma interna en producción para crear, programar y auditar agentes con memoria persistente, scoring determinista y aprobación humana."
+tags = ["FastAPI", "PostgreSQL", "React", "PixiJS", "Alembic"]
+
+[[projects]]
+slug = "noc"
+category = "Observabilidad"
+title = "ZemZysteM NOC"
+text = "Centro de monitoreo propio: agente recolector y portal para aplicativos y VPS, con configuración declarativa en TOML e incidentes con umbral."
+tags = ["FastAPI", "Pydantic", "Jinja2", "Linux"]
+
+[[contact]]
+slug = "linkedin"
+label = "LinkedIn"
+icon = "linkedin"
+url = "https://www.linkedin.com/in/zemog-g%C3%B3mez-tabares-8418a5296/"
+
+[[contact]]
+slug = "website"
+label = "zemzystem.com"
+icon = "globe"
+url = "https://zemzystem.com"
+
+[[contact]]
+slug = "instagram"
+label = "@zemzystem"
+icon = "instagram"
+url = "https://www.instagram.com/zemzystem/"
+
+[[contact]]
+slug = "github"
+label = "GitHub"
+icon = "github"
+url = "https://github.com/zemogc"
+
+[[sections]]
+slug = "about"
+title = "Sobre mí"
+
+[[sections]]
+slug = "stack"
+title = "Stack"
+
+[[sections]]
+slug = "projects"
+title = "Proyectos"
+
+[[sections]]
+slug = "contact"
+title = "Contacto"
