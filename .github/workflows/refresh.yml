@@ -29,9 +29,8 @@ jobs:
         with:
           python-version: "3.12"
 
+      # Lee la gráfica pública del perfil, que ya incluye las contribuciones privadas.
       - name: Descargar actividad
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python scripts/fetch_github.py
 
       - name: Regenerar SVG
