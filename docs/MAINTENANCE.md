@@ -20,7 +20,8 @@ content/profile.toml        textos de todos los canales
 data/github.json            actividad real (la escribe el workflow refresh)
 scripts/build_assets.py     punto de entrada del generador
 scripts/render/             un módulo por canal + kit.py (paleta, marcos, logo)
-scripts/fetch_github.py     consulta la API GraphQL de GitHub
+scripts/fetch_github.py     lee la gráfica pública de contribuciones
+tests/                      pruebas del lector de la gráfica
 scripts/check_readme.py     comprueba que el README apunte a recursos existentes
 .github/workflows/ci.yml    valida cada pull request
 .github/workflows/refresh.yml  actualiza la actividad a diario (06:17 UTC)
@@ -44,18 +45,13 @@ python3 scripts/build_assets.py
 python3 scripts/check_readme.py
 ```
 
-Para traer la actividad en local hace falta un token: `GITHUB_TOKEN=... python3 scripts/fetch_github.py`.
+`scripts/fetch_github.py` lee la gráfica pública del perfil
+(`https://github.com/users/<login>/contributions`), la misma que ve cualquier
+visitante: incluye las contribuciones privadas mientras el perfil tenga activada
+la opción *Private contributions*. No necesita token. Si GitHub cambia el
+formato de esa página, el script falla en lugar de escribir cifras incorrectas
+y la CI lo detecta en el siguiente pull request.
 
-### Contribuciones privadas
-
-El token automático de Actions solo ve la actividad pública. Para que CH 03
-cuente también las contribuciones privadas, el workflow `refresh` usa el
-secreto `PROFILE_TOKEN` si existe:
-
-1. Crear un token clásico en *Settings → Developer settings → Personal access tokens*
-   con el único scope `read:user`.
-2. Guardarlo en el repositorio como secreto de Actions con el nombre `PROFILE_TOKEN`.
-3. Ejecutar `refresh` desde la pestaña *Actions* (*Run workflow*).
 Requiere Python 3.11 o superior y no tiene dependencias externas.
 
 ## Flujo de trabajo
