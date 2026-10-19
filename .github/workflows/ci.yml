@@ -18,6 +18,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Lint del generador
+        run: pipx run ruff check scripts
+
       - name: Regenerar SVG desde content/profile.toml
         run: python scripts/build_assets.py
 
