@@ -45,6 +45,17 @@ python3 scripts/check_readme.py
 ```
 
 Para traer la actividad en local hace falta un token: `GITHUB_TOKEN=... python3 scripts/fetch_github.py`.
+
+### Contribuciones privadas
+
+El token automático de Actions solo ve la actividad pública. Para que CH 03
+cuente también las contribuciones privadas, el workflow `refresh` usa el
+secreto `PROFILE_TOKEN` si existe:
+
+1. Crear un token clásico en *Settings → Developer settings → Personal access tokens*
+   con el único scope `read:user`.
+2. Guardarlo en el repositorio como secreto de Actions con el nombre `PROFILE_TOKEN`.
+3. Ejecutar `refresh` desde la pestaña *Actions* (*Run workflow*).
 Requiere Python 3.11 o superior y no tiene dependencias externas.
 
 ## Flujo de trabajo

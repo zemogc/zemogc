@@ -29,9 +29,11 @@ jobs:
         with:
           python-version: "3.12"
 
+      # PROFILE_TOKEN (token personal con scope read:user) incluye las contribuciones
+      # privadas; sin él, GITHUB_TOKEN solo ve la actividad pública.
       - name: Descargar actividad
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PROFILE_TOKEN || secrets.GITHUB_TOKEN }}
         run: python scripts/fetch_github.py
 
       - name: Regenerar SVG
