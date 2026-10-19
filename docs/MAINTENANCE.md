@@ -1,28 +1,41 @@
 # Mantenimiento del perfil
 
-El README combina texto en Markdown con SVG generados. Los textos de las
-imágenes no se editan a mano en `assets/`: salen de `content/profile.toml`.
+El perfil es una «pared de pantallas»: cada sección es un canal que emite.
+Los SVG de `assets/` se generan; no se editan a mano.
+
+## Canales
+
+| Canal | Archivo | Qué muestra |
+|-------|---------|-------------|
+| CH 01 | `assets/hero-*.svg` | Presentación con escenas rotativas, ficha lateral y rótulo de noticias |
+| CH 02 | `assets/system-*.svg` | Ficha estilo neofetch con rol y stack |
+| CH 03 | `assets/activity-*.svg` | Ciudad isométrica con las contribuciones reales del último año |
+| CH 04 | `assets/products-*.svg` | Un monitor por producto con su mini interfaz animada |
+| CH 05 | `assets/outro-*.svg` y `assets/contact/` | Contacto y cierre |
 
 ## Estructura
 
 ```
-README.md                 composición del perfil
-content/profile.toml      fuente única de los textos visuales
-scripts/build_assets.py   genera los SVG en variantes dark y light
-scripts/check_readme.py   comprueba que el README apunte a recursos existentes
-assets/                   SVG generados (no editar a mano)
-.github/workflows/ci.yml  valida que todo lo anterior esté sincronizado
+content/profile.toml        textos de todos los canales
+data/github.json            actividad real (la escribe el workflow refresh)
+scripts/build_assets.py     punto de entrada del generador
+scripts/render/             un módulo por canal + kit.py (paleta, marcos, logo)
+scripts/fetch_github.py     consulta la API GraphQL de GitHub
+scripts/check_readme.py     comprueba que el README apunte a recursos existentes
+.github/workflows/ci.yml    valida cada pull request
+.github/workflows/refresh.yml  actualiza la actividad a diario (06:17 UTC)
 ```
 
 ## Cambios habituales
 
-| Quiero…                         | Edito                                   |
-|---------------------------------|-----------------------------------------|
-| Cambiar rol, titular o chips    | `[hero]` en `content/profile.toml`      |
-| Añadir una tecnología           | el grupo correspondiente en `[[stack]]` |
-| Añadir un proyecto              | un bloque `[[projects]]` y su `<picture>` en el README |
-| Cambiar un enlace de contacto   | `[[contact]]` y el `href` del README    |
-| Ajustar colores                 | `THEMES` en `scripts/build_assets.py`   |
+| Quiero…                        | Edito                                        |
+|--------------------------------|----------------------------------------------|
+| Cambiar nombre, rol o titular  | `[identity]` en `content/profile.toml`       |
+| Añadir una tecnología          | la fila correspondiente en `[[system]]`      |
+| Añadir o cambiar un producto   | `[[products]]` (escena: playlist, route, agents, ticket, devices, pulse) |
+| Pasar un producto a producción | `status = "live"` en su bloque               |
+| Cambiar el rótulo inferior     | `[ticker]`                                   |
+| Ajustar colores                | `SCREEN` y `THEMES` en `scripts/render/kit.py` |
 
 Después de cualquier cambio:
 
@@ -31,6 +44,7 @@ python3 scripts/build_assets.py
 python3 scripts/check_readme.py
 ```
 
+Para traer la actividad en local hace falta un token: `GITHUB_TOKEN=... python3 scripts/fetch_github.py`.
 Requiere Python 3.11 o superior y no tiene dependencias externas.
 
 ## Flujo de trabajo
@@ -41,9 +55,10 @@ Requiere Python 3.11 o superior y no tiene dependencias externas.
 
 ## Diseño
 
-- Paleta: grafito con acento cian (`#22D3EE` / `#0E7490`) y degradado a índigo.
-- Tipografía: la del sistema (sans para texto, monoespaciada para etiquetas),
-  porque GitHub sirve los SVG como imágenes y no carga fuentes externas.
-- Animaciones solo en CSS dentro del SVG, se desactivan con
-  `prefers-reduced-motion`.
-- Cada recurso tiene variante dark y light, elegida con `<picture>`.
+- Las pantallas son oscuras en ambos temas, como un display real; lo que cambia
+  con el tema de GitHub es el chasis.
+- Acento cian `#22D3EE` con degradado a índigo `#818CF8`; rojo `EN VIVO`,
+  verde producción y ámbar desarrollo, siempre acompañados de texto.
+- Tipografía del sistema: GitHub sirve los SVG como imágenes y no carga fuentes externas.
+- Animaciones solo en CSS dentro del SVG; se desactivan con `prefers-reduced-motion`
+  y el estado estático muestra siempre la escena principal.
