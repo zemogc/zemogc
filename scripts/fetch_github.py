@@ -10,9 +10,11 @@ contribuciones privadas cuando el perfil las tiene visibles. No necesita token.
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 import tomllib
+import urllib.error
 import urllib.request
 from datetime import date, datetime, timezone
 from pathlib import Path
@@ -26,8 +28,11 @@ TIP = re.compile(r"<tool-tip\b([^>]*)>\s*([^<]+?)\s*</tool-tip>", re.S)
 TOTAL = re.compile(r"([\d,]+)\s+contributions?\s+in the last year", re.S)
 
 
-def get(url: str) -> str:
-    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+def get(url: str, token: str | None = None) -> str:
+    headers = {"User-Agent": USER_AGENT}
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    request = urllib.request.Request(url, headers=headers)
     with urllib.request.urlopen(request, timeout=30) as response:
         return response.read().decode("utf-8")
 
@@ -60,25 +65,45 @@ def parse_calendar(html: str) -> tuple[list[list[dict]], int | None]:
     return weeks, int(total.group(1).replace(",", "")) if total else None
 
 
+def readable(counted: int, declared: int | None, weeks: list) -> bool:
+    """La página cambia durante el día: se tolera un desfase pequeño, no un formato roto."""
+    if not weeks or declared is None:
+        return False
+    return abs(counted - declared) <= max(5, declared * 0.02)
+
+
+def profile_info(login: str) -> dict:
+    """Datos de la API REST; si falla (p. ej. límite de peticiones), conserva los anteriores."""
+    try:
+        profile = json.loads(get(f"https://api.github.com/users/{login}", os.environ.get("GITHUB_TOKEN")))
+        return {"created_at": profile["created_at"], "public_repos": profile["public_repos"]}
+    except (urllib.error.URLError, KeyError, ValueError) as error:
+        if not OUT.exists():
+            raise
+        previous = json.loads(OUT.read_text(encoding="utf-8"))
+        print(f"API de perfil no disponible ({error}); se conservan los datos anteriores")
+        return {"created_at": previous["created_at"], "public_repos": previous["public_repos"]}
+
+
 def main() -> None:
     check = "--check" in sys.argv[1:]
     login = tomllib.loads((ROOT / "content" / "profile.toml").read_text(encoding="utf-8"))["login"]
 
     weeks, declared = parse_calendar(get(f"https://github.com/users/{login}/contributions"))
     counted = sum(d["count"] for week in weeks for d in week)
-    if not weeks or declared is None or counted != declared:
+    if not readable(counted, declared, weeks):
         raise SystemExit(f"La gráfica no se pudo leer: {len(weeks)} semanas, {counted} contadas, {declared} declaradas")
+    if counted != declared:
+        print(f"Aviso: {counted} contadas frente a {declared} declaradas; se usa la suma de los días")
 
-    profile = json.loads(get(f"https://api.github.com/users/{login}"))
     snapshot = {
         "login": login,
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "created_at": profile["created_at"],
-        "public_repos": profile["public_repos"],
-        "total_contributions": declared,
+        **profile_info(login),
+        "total_contributions": counted,
         "weeks": weeks,
     }
-    print(f"{declared} contribuciones · {len(weeks)} semanas · {snapshot['public_repos']} repos públicos")
+    print(f"{counted} contribuciones · {len(weeks)} semanas · {snapshot['public_repos']} repos públicos")
     if check:
         return
     OUT.parent.mkdir(parents=True, exist_ok=True)

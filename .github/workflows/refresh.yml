@@ -23,14 +23,17 @@ jobs:
   refresh:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
       # Lee la gráfica pública del perfil, que ya incluye las contribuciones privadas.
       - name: Descargar actividad
+        env:
+          # Solo evita el límite de peticiones de la API REST; la gráfica es pública.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python scripts/fetch_github.py
 
       - name: Regenerar SVG

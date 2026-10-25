@@ -4,7 +4,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
-from fetch_github import parse_calendar  # noqa: E402
+from fetch_github import parse_calendar, readable  # noqa: E402
 
 # Fragmento con la forma de https://github.com/users/<login>/contributions.
 HTML = """
@@ -40,6 +40,17 @@ class ParseCalendarTest(unittest.TestCase):
     def test_unreadable_page(self):
         weeks, total = parse_calendar("<html></html>")
         self.assertEqual((weeks, total), ([], None))
+
+
+class ReadableTest(unittest.TestCase):
+    def test_small_drift_is_tolerated(self):
+        # La página puede sumar una contribución del día entre la cabecera y las celdas.
+        self.assertTrue(readable(933, 934, [[{}]]))
+
+    def test_broken_format_is_rejected(self):
+        self.assertFalse(readable(0, 934, [[{}]]))
+        self.assertFalse(readable(934, None, [[{}]]))
+        self.assertFalse(readable(0, 0, []))
 
 
 if __name__ == "__main__":
