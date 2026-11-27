@@ -13,6 +13,7 @@ import json
 import os
 import re
 import sys
+import time
 import tomllib
 import urllib.error
 import urllib.request
@@ -22,6 +23,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "data" / "github.json"
 USER_AGENT = "zemogc-profile-refresh"
+RETRIES = 3
 
 CELL = re.compile(r"<td\b[^>]*>", re.S)
 TIP = re.compile(r"<tool-tip\b([^>]*)>\s*([^<]+?)\s*</tool-tip>", re.S)
@@ -33,8 +35,19 @@ def get(url: str, token: str | None = None) -> str:
     if token:
         headers["Authorization"] = f"Bearer {token}"
     request = urllib.request.Request(url, headers=headers)
-    with urllib.request.urlopen(request, timeout=30) as response:
-        return response.read().decode("utf-8")
+    for attempt in range(1, RETRIES + 1):
+        try:
+            with urllib.request.urlopen(request, timeout=30) as response:
+                return response.read().decode("utf-8")
+        except urllib.error.HTTPError as error:
+            # Los 4xx (salvo 429) no mejoran reintentando.
+            if attempt == RETRIES or (error.code < 500 and error.code != 429):
+                raise
+        except (urllib.error.URLError, TimeoutError):
+            if attempt == RETRIES:
+                raise
+        time.sleep(2**attempt)
+    raise AssertionError("inalcanzable")
 
 
 def attr(tag: str, name: str) -> str | None:

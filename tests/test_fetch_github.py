@@ -1,9 +1,12 @@
 import sys
 import unittest
+import urllib.error
 from pathlib import Path
+from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
+import fetch_github  # noqa: E402
 from fetch_github import parse_calendar, readable  # noqa: E402
 
 # Fragmento con la forma de https://github.com/users/<login>/contributions.
@@ -51,6 +54,37 @@ class ReadableTest(unittest.TestCase):
         self.assertFalse(readable(0, 934, [[{}]]))
         self.assertFalse(readable(934, None, [[{}]]))
         self.assertFalse(readable(0, 0, []))
+
+
+class _Response:
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
+
+    def read(self):
+        return b"ok"
+
+
+class GetRetryTest(unittest.TestCase):
+    def setUp(self):
+        patcher = mock.patch.object(fetch_github.time, "sleep")
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def test_retries_transient_errors(self):
+        errors = [urllib.error.HTTPError("u", 503, "x", {}, None), _Response()]
+        with mock.patch.object(fetch_github.urllib.request, "urlopen", side_effect=errors) as urlopen:
+            self.assertEqual(fetch_github.get("https://example.test"), "ok")
+        self.assertEqual(urlopen.call_count, 2)
+
+    def test_does_not_retry_client_errors(self):
+        error = urllib.error.HTTPError("u", 404, "x", {}, None)
+        with mock.patch.object(fetch_github.urllib.request, "urlopen", side_effect=error) as urlopen:
+            with self.assertRaises(urllib.error.HTTPError):
+                fetch_github.get("https://example.test")
+        self.assertEqual(urlopen.call_count, 1)
 
 
 if __name__ == "__main__":
