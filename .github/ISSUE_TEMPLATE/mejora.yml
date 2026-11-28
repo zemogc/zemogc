@@ -1,0 +1,23 @@
+name: Mejora
+description: Propón un cambio en el diseño, el contenido o el generador
+labels: [enhancement]
+body:
+  - type: textarea
+    id: propuesta
+    attributes:
+      label: Propuesta
+      description: Qué cambiarías y por qué.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Área
+      options:
+        - Diseño de las pantallas (SVG)
+        - Contenido (content/profile.toml)
+        - Generador o scripts
+        - CI y workflows
+        - Documentación
+    validations:
+      required: true
