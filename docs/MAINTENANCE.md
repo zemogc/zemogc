@@ -25,6 +25,7 @@ tests/                      lector de la gráfica, generador de SVG y README
 scripts/check_readme.py     comprueba que el README apunte a recursos existentes
 .github/workflows/ci.yml    valida cada pull request
 .github/workflows/refresh.yml  actualiza la actividad a diario (06:17 UTC)
+.github/workflows/codeql.yml  análisis de seguridad CodeQL (PR, main y lunes 05:41 UTC)
 .github/dependabot.yml      actualiza acciones de GitHub y dependencias pip cada mes
 requirements-dev.txt        herramientas de desarrollo (ruff)
 ```
