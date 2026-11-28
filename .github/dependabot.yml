@@ -1,3 +1,6 @@
+# Solo se configuran los ecosistemas que el repo usa de verdad. Dependabot falla
+# con "no se encontraron manifiestos" si se declara uno sin archivos que vigilar;
+# añade una entrada nueva junto con el primer manifiesto del ecosistema.
 version: 2
 updates:
   - package-ecosystem: github-actions
@@ -6,9 +9,16 @@ updates:
       interval: monthly
     commit-message:
       prefix: "chore(deps)"
+    groups:
+      actions:
+        patterns: ["*"]
+
   - package-ecosystem: pip
     directory: /
     schedule:
       interval: monthly
     commit-message:
       prefix: "chore(deps)"
+    groups:
+      dev-tools:
+        patterns: ["*"]
