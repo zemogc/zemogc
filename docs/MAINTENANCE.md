@@ -23,7 +23,7 @@ scripts/render/             un módulo por canal + kit.py (paleta, marcos, logo)
 scripts/fetch_github.py     lee la gráfica pública de contribuciones
 tests/                      lector de la gráfica, generador de SVG y README
 scripts/check_readme.py     comprueba que el README apunte a recursos existentes
-.github/workflows/ci.yml    valida cada pull request
+.github/workflows/ci.yml    valida cada pull request (incluye actionlint sobre los workflows)
 .github/workflows/refresh.yml  actualiza la actividad a diario (06:17 UTC)
 .github/workflows/codeql.yml  análisis de seguridad CodeQL (PR, main y lunes 05:41 UTC)
 .github/dependabot.yml      actualiza acciones de GitHub y dependencias pip cada mes
