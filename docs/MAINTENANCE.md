@@ -25,7 +25,8 @@ tests/                      lector de la gráfica, generador de SVG y README
 scripts/check_readme.py     comprueba que el README apunte a recursos existentes
 .github/workflows/ci.yml    valida cada pull request
 .github/workflows/refresh.yml  actualiza la actividad a diario (06:17 UTC)
-.github/dependabot.yml      actualiza las acciones de GitHub cada mes
+.github/dependabot.yml      actualiza acciones de GitHub y dependencias pip cada mes
+requirements-dev.txt        herramientas de desarrollo (ruff)
 ```
 
 ## Cambios habituales
@@ -54,7 +55,8 @@ formato de esa página, el script falla en lugar de escribir cifras incorrectas
 y la CI lo detecta en el siguiente pull request.
 
 Requiere Python 3.11 o superior y no tiene dependencias externas. La CI
-prueba 3.11, 3.12 y 3.13; el lint usa `ruff` fijado a una versión.
+prueba 3.11, 3.12 y 3.13; el lint usa `ruff`, fijado en `requirements-dev.txt`
+(`pip install -r requirements-dev.txt`).
 
 Para correr todo en local:
 

@@ -1,0 +1,2 @@
+# Herramientas de desarrollo; el generador no tiene dependencias en tiempo de ejecución.
+ruff==0.16.8
