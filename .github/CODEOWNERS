@@ -1,0 +1,6 @@
+# Propietario por defecto: revisa todo lo que no tenga una regla más específica.
+*                   @zemogc
+
+# Workflows y automatización: afectan permisos y publicación.
+/.github/           @zemogc
+/scripts/           @zemogc
