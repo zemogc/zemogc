@@ -1,0 +1,30 @@
+name: Error
+description: Algo del perfil o del generador no funciona como debería
+labels: [bug]
+body:
+  - type: textarea
+    id: que-pasa
+    attributes:
+      label: Qué pasa
+      description: Describe el error y qué esperabas que ocurriera.
+    validations:
+      required: true
+  - type: textarea
+    id: reproducir
+    attributes:
+      label: Cómo reproducirlo
+      description: Comandos ejecutados, enlace a la ejecución fallida del workflow o captura del SVG afectado.
+      placeholder: |
+        1. python3 scripts/build_assets.py
+        2. ...
+    validations:
+      required: true
+  - type: input
+    id: entorno
+    attributes:
+      label: Entorno
+      description: Sistema operativo y versión de Python (o "GitHub Actions").
+      placeholder: Windows 11 · Python 3.13
+  - type: markdown
+    attributes:
+      value: Si es una vulnerabilidad, no la publiques aquí; usa el [reporte privado](https://github.com/zemogc/zemogc/security/advisories/new).
